@@ -1,0 +1,36 @@
+version: "3"
+services:
+  config-server:
+    image: config-server
+    ports:
+      - 8888:8888
+  author-service:
+    image: author-service
+    restart: always
+    ports:
+      - 8080
+  book-service:
+    image: book-service
+    restart: always
+    ports:
+      - 8080
+  gateway:
+    image: gateway
+    restart: always
+    ports:
+      - 8080:8080
+  eureka-server:
+    image: eureka-server
+    restart: always
+    ports:
+      - 8761:8761
+  turbine-service:
+    image: turbine-service
+    restart: always
+    ports:
+      - 8989:8989
+  zipkin-server:
+    image: openzipkin/zipkin
+    restart: always
+    ports:
+      - 9411:9411

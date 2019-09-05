@@ -1,0 +1,37 @@
+eureka:
+    client:
+        serviceUrl:
+            defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
+server:
+    port: 8080
+spring:
+    cloud:
+        gateway:
+            discovery:
+                locator:
+                    enabled: true
+                    lower-case-service-id: true
+            routes:
+            -   id: book-service
+                predicates:
+                - Path=/books/**
+                uri: lb://book-service/
+                filters:
+                 - RewritePath=/books/(?<segment>.*), /${segment}
+            -   id: author-service
+                predicates:
+                - Path=/authors/**
+                uri: lb://author-service/
+                filters:
+                 - RewritePath=/authors/(?<segment>.*), /${segment}
+    sleuth:
+        rxjava:
+            schedulers:
+                hook:
+                    enabled: false
+        sampler:
+            probability: 1.0
+
+---
+spring.profiles: docker
+eureka.client.serviceUrl.defaultZone: ${EUREKA_URI:http://eureka-server:8761/eureka}
